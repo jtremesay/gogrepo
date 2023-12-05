@@ -547,6 +547,11 @@ def process_argv(argv):
         "-skipgames", action="store_true", help="skip downloading of any GOG game files"
     )
     g1.add_argument(
+        "-skippatches",
+        action="store_true",
+        help="skip downloading of any GOG game patches files",
+    )
+    g1.add_argument(
         "-id", action="store", help="id of the game in the manifest to download"
     )
     g1.add_argument(
@@ -946,7 +951,7 @@ def cmd_import(src_dir, dest_dir):
             shutil.copy(f, dest_file)
 
 
-def cmd_download(savedir, skipextras, skipgames, skipids, dryrun, id):
+def cmd_download(savedir, skipextras, skipgames, skippatches, skipids, dryrun, id):
     sizes, rates, errors = {}, {}, {}
     work = Queue()  # build a list of work items
 
@@ -991,6 +996,10 @@ def cmd_download(savedir, skipextras, skipgames, skipids, dryrun, id):
 
         if skipgames:
             item.downloads = []
+        elif skippatches:
+            item.downloads = list(
+                filter(lambda i: not i["name"].startswith("patch_"), item.downloads)
+            )
 
         # Generate and save a game info text file
         if not dryrun:
@@ -1387,6 +1396,7 @@ def main(args):
             args.savedir,
             args.skipextras,
             args.skipgames,
+            args.skippatches,
             args.skipids,
             args.dryrun,
             args.id,
