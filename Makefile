@@ -7,3 +7,5 @@ update:
 
 download:
 	python3 gogrepo.py download -skipextras -skippatches games/
+
+.PHONY: all update download
