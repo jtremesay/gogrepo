@@ -6,4 +6,4 @@ update:
 	python3 gogrepo.py update os windows linux -lang en fr
 
 download:
-	python3 gogrepo.py download -skipextras games/
+	python3 gogrepo.py download -skipextras -skippatches games/
